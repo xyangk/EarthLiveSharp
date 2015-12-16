@@ -6,5 +6,7 @@
 
 每十分钟更新一次照片,并自动设置为壁纸.可加入开机启动项.
 
+照片本身较小,可以在壁纸设置中选择居中并把背景颜色改为黑色,效果如下.
+
 ## 效果
 ![screenshot1](https://github.com/xyangk/EarthLiveSharp/blob/master/demo/demo.png)
