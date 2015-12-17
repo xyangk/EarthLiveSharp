@@ -37,7 +37,7 @@ def download_img():
     request_img = urllib2.Request(url)
     response_img = urllib2.urlopen(request_img)
     data_img = response_img.read()
-    picname = '/Users/xiewenping/Pictures/Earth.png'
+    picname = '/Users/xiao/Pictures/Earth.png'# change this path
     with open(picname, 'wb') as fp:
         fp.write(data_img)
 
