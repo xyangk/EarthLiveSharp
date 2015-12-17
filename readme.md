@@ -8,5 +8,7 @@
 
 照片本身较小,可以在壁纸设置中选择居中并把背景颜色改为黑色,效果如下.
 
+### 该脚本直接从官网获取照片, 会对官网造成流量压力, 目前作者已面临[巨大压力](https://github.com/bitdust/EarthLiveSharp/issues/13).
+
 ## 效果
 ![screenshot1](https://github.com/xyangk/EarthLiveSharp/blob/master/demo/demo.png)
