@@ -5,7 +5,7 @@ import re
 import urllib2
 import time
 import json
-import os
+import subprocess
 
 def download_img():
     url_temp = 'http://himawari8.nict.go.jp/img/D531106/latest.json'
@@ -37,7 +37,7 @@ def download_img():
     request_img = urllib2.Request(url)
     response_img = urllib2.urlopen(request_img)
     data_img = response_img.read()
-    picname = '/home/xiao/Pictures/himawari8/Earth.png'#change this path
+    picname = '/Users/xiewenping/Pictures/Earth.png'
     with open(picname, 'wb') as fp:
         fp.write(data_img)
 
@@ -46,8 +46,13 @@ def download_img():
 def set_wallpaper():
     picpath = download_img()
     time.sleep(30)#wait for download
-    os.system('gsettings set org.gnome.desktop.background picture-uri "file://%s"' % (picpath))
-    # print 'Done.'
+    script = """/usr/bin/osascript<<END
+                tell application "Finder"
+                set desktop picture to POSIX file "%s"
+                end tell
+                END"""
+    subprocess.call(script%picpath, shell=True)
+    print 'Done.'
 
 if __name__ == '__main__':
     while True:
