@@ -32,8 +32,7 @@ def download_img():
         pass
 
     #Download picture
-    url = "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/thumbnail/550/"+ \
-        year+"/"+month+"/"+day+"/"+hour+minute+second+"_0_0.png"
+    url = "http://res.cloudinary.com/dajkskdsp/image/upload/earth_live_photo_vps.png"
     request_img = urllib2.Request(url)
     response_img = urllib2.urlopen(request_img)
     data_img = response_img.read()
@@ -56,5 +55,6 @@ def set_wallpaper():
 
 if __name__ == '__main__':
     while True:
+        print "waiting..."
         set_wallpaper()
         time.sleep(600)
