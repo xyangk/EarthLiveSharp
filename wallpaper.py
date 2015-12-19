@@ -32,7 +32,9 @@ def download_img():
         pass
 
     #Download picture
-    url = "http://res.cloudinary.com/dajkskdsp/image/upload/earth_live_photo_vps.png"
+    # url = "http://res.cloudinary.com/dajkskdsp/image/upload/earth_live_photo_vps.png"
+    url = "http://res.cloudinary.com/dajkskdsp/image/upload/%s_%s_%s_%s_%s_%s_earth_live_photo_vps.png" \
+    	% (year, month, day, hour, minute, second)
     request_img = urllib2.Request(url)
     response_img = urllib2.urlopen(request_img)
     data_img = response_img.read()
