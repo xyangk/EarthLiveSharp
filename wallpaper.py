@@ -34,7 +34,7 @@ def download_img():
     #Download picture
     # url = "https://res.cloudinary.com/dajkskdsp/image/upload/earth_live_photo_vps.png"
     url = "http://res.cloudinary.com/dajkskdsp/image/upload/%s_%s_%s_%s_%s_%s_earth_live_photo_vps.png" \
-    	% (year, month, day, hour, int(minute)-10, second)
+    	% (year, month, day, hour, minute, second)
 
     request_img = urllib2.Request(url)
     response_img = urllib2.urlopen(request_img)
@@ -46,8 +46,8 @@ def download_img():
     return picname
 
 def set_wallpaper():
+    time.sleep(30)#wait for server download
     picpath = download_img()
-    time.sleep(30)#wait for download
     os.system('gsettings set org.gnome.desktop.background picture-uri "file://%s"' % (picpath))
     print 'Done.'
 
