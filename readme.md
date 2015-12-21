@@ -16,5 +16,7 @@ ubuntu直接添加文件就可以，可以参考[这里](http://jingyan.baidu.co
 
 使用[Cloudinary](https://cloudinary.com) CDN, 减少官网压力.
 
+服务端图片更新有延时,客户端按需延时等待图片更新.
+
 ## 效果
 ![screenshot1](https://github.com/xyangk/EarthLiveSharp/blob/master/demo/demo.png)
