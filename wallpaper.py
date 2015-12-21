@@ -40,6 +40,8 @@ def download_img():
     try:
         response_img = urllib2.urlopen(request_img)#
     except:
+        print "Wating server download..."
+        time.sleep(60)#delay for server update
         response_img = urllib2.urlopen(request_img_2)
     data_img = response_img.read()
     picname = '/home/xiao/Pictures/himawari8/Earth.png'#change this path
