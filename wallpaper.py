@@ -32,12 +32,15 @@ def download_img():
         pass
 
     #Download picture
-    # url = "https://res.cloudinary.com/dajkskdsp/image/upload/earth_live_photo_vps.png"
-    url = "http://res.cloudinary.com/dajkskdsp/image/upload/%s_%s_%s_%s_%s_%s_earth_live_photo_vps.png" \
-    	% (year, month, day, hour, minute, second)
-
+    url = "http://res.cloudinary.com/dajkskdsp/image/upload/earth/%s/%s/%s/%s_%s_%s.png" \
+        % (year, month, day, hour, minute, second)
+    url_2 = "https://res.cloudinary.com/dajkskdsp/image/upload/earth_live_photo_vps.png"
     request_img = urllib2.Request(url)
-    response_img = urllib2.urlopen(request_img)
+    request_img_2 = urllib2.Request(url_2)
+    try:
+        response_img = urllib2.urlopen(request_img)#
+    except:
+        response_img = urllib2.urlopen(request_img_2)
     data_img = response_img.read()
     picname = '/home/xiao/Pictures/himawari8/Earth.png'#change this path
     with open(picname, 'wb') as fp:
