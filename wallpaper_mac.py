@@ -52,7 +52,7 @@ def download_img():
 
 def set_wallpaper():
     picpath = download_img()
-    time.sleep(30)#wait for download
+    # time.sleep(30)#wait for download
     script = """/usr/bin/osascript<<END
                 tell application "Finder"
                 set desktop picture to POSIX file "%s"

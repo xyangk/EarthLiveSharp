@@ -51,7 +51,7 @@ def download_img():
     return picname
 
 def set_wallpaper():
-    time.sleep(30)#wait for server download
+    # time.sleep(30)#wait for server download
     picpath = download_img()
     os.system('gsettings set org.gnome.desktop.background picture-uri "file://%s"' % (picpath))
     print 'Done.'
