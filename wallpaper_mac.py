@@ -45,8 +45,7 @@ def download_img():
         time.sleep(60)#delay for server update
         response_img = urllib2.urlopen(request_img_2)
     data_img = response_img.read()
-    picname = os.path.join(os.getcwd(), "Earth.png") #pic path under the script directory
-
+    picname = os.path.join(os.getcwd(), "Earth.png") # pic path under the script dir
     with open(picname, 'wb') as fp:
         fp.write(data_img)
 
@@ -57,10 +56,8 @@ def set_wallpaper():
     # time.sleep(30)#wait for download
     script = """/usr/bin/osascript<<END
                 tell application "Finder"
-    
-    set desktop picture to POSIX file "%s"
-    
-end tell
+                set desktop picture to POSIX file "%s"
+                end tell
                 END"""
     subprocess.call(script%picpath, shell=True)
     print 'Done.'
