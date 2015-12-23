@@ -18,5 +18,7 @@ ubuntu直接添加文件就可以，可以参考[这里](http://jingyan.baidu.co
 
 服务端图片更新有延时,客户端按需延时等待图片更新.
 
+无需修改脚本中文件路径,可直使用.多谢[LathamZ](https://github.com/LathamZ)
+
 ## 效果
 ![screenshot1](https://github.com/xyangk/EarthLiveSharp/blob/master/demo/demo.png)
