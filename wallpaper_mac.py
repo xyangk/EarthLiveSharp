@@ -7,6 +7,11 @@ import time
 import json
 import subprocess
 import os
+from PIL import Image
+
+ORIGINAL_IMG_WIDTH = 550
+ORIGINAL_IMG_HEIGHT = 550
+
 
 def download_img():
     url_temp = 'http://himawari8.nict.go.jp/img/D531106/latest.json'
@@ -44,17 +49,43 @@ def download_img():
         print "Wating server download..."
         time.sleep(60)#delay for server update
         response_img = urllib2.urlopen(request_img_2)
-    data_img = response_img.read()
 
+    data_img = Image.open(response_img)
+    scaled_img = scale_original_wallpaper(data_img)
     picname = os.path.join(os.path.split(os.path.realpath(__file__))[0], "Earth.png") # pic path under the script dir
-    with open(picname, 'wb') as fp:
-        fp.write(data_img)
+    scaled_img.save(picname)
 
     return picname
 
+def scale_original_wallpaper(img):
+    """ Return a scaled img. """
+
+    size = get_desktop_size()
+    bg_img = Image.new('RGB', size, 'black')
+
+    # calculate the paste origin
+    o_x = (size[0] - ORIGINAL_IMG_WIDTH) / 2
+    o_y = (size[1] - ORIGINAL_IMG_HEIGHT) / 2
+
+    bg_img.paste(img, (o_x, o_y))
+    return bg_img
+
+def get_desktop_size():
+    """ Get the current desktop resolution. 
+
+        Return a tuple of pixels (width, height) """
+    from AppKit import NSScreen
+
+    frame = NSScreen.mainScreen().frame()
+    height = int(frame.size.height)
+    width = int(frame.size.width)
+
+    return (width, height)
+
+
+
 def set_wallpaper():
     picpath = download_img()
-    # time.sleep(30)#wait for download
     script = """/usr/bin/osascript<<END
                 tell application "Finder"
                 set desktop picture to POSIX file "%s"
