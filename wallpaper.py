@@ -44,7 +44,7 @@ def download_img():
         time.sleep(60)#delay for server update
         response_img = urllib2.urlopen(request_img_2)
     data_img = response_img.read()
-    picname = '/home/xiao/Pictures/himawari8/Earth.png'#change this path
+    picname = os.path.join(os.getcwd(), "Earth.png") # pic path under the script dir
     with open(picname, 'wb') as fp:
         fp.write(data_img)
 
