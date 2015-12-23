@@ -6,6 +6,7 @@ import urllib2
 import time
 import json
 import subprocess
+import os
 
 def download_img():
     url_temp = 'http://himawari8.nict.go.jp/img/D531106/latest.json'
@@ -44,7 +45,7 @@ def download_img():
         time.sleep(60)#delay for server update
         response_img = urllib2.urlopen(request_img_2)
     data_img = response_img.read()
-    picname = '/Users/xiao/Pictures/Earth.png'# change this path
+    picname = os.path.join(os.getcwd(), "Earth.png") # pic path under the script dir
     with open(picname, 'wb') as fp:
         fp.write(data_img)
 
