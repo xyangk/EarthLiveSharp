@@ -49,6 +49,7 @@ def download_img():
         print "Wating server download..."
         time.sleep(60)#delay for server update
         response_img = urllib2.urlopen(request_img_2)
+
     data_img = Image.open(response_img)
     scaled_img = scale_original_wallpaper(data_img)
     picname = os.path.join(os.path.split(os.path.realpath(__file__))[0], "Earth.png") # pic path under the script dir

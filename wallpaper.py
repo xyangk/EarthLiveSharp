@@ -44,7 +44,7 @@ def download_img():
         time.sleep(60)#delay for server update
         response_img = urllib2.urlopen(request_img_2)
     data_img = response_img.read()
-    picname = '/home/xiao/Pictures/himawari8/Earth.png'#change this path
+    picname = os.path.join(os.getcwd(), "Earth.png") # pic path under the script dir
     with open(picname, 'wb') as fp:
         fp.write(data_img)
 
@@ -54,6 +54,7 @@ def set_wallpaper():
     # time.sleep(30)#wait for server download
     picpath = download_img()
     os.system('gsettings set org.gnome.desktop.background picture-uri "file://%s"' % (picpath))
+    os.system('gsettings set org.gnome.desktop.background picture-options "centered"')
     print 'Done.'
 
 if __name__ == '__main__':
