@@ -92,6 +92,7 @@ def set_wallpaper():
                 end tell
                 END"""
     subprocess.call(script%picpath, shell=True)
+    os.remove(picpath) # It seems that PIL.Image.save() won't overwrite the previous version. delete it after wallpaper set.
     print 'Done.'
 
 if __name__ == '__main__':
