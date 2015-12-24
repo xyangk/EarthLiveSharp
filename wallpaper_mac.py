@@ -82,6 +82,7 @@ def get_desktop_size():
     height = frame.size.height
     width = frame.size.width
 
+
     MAX_WIDTH = 2000
     MAX_HEIGHT = 2000
 
