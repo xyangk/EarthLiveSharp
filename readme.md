@@ -18,7 +18,7 @@ ubuntu直接添加文件就可以，可以参考[这里](http://jingyan.baidu.co
 
 服务端图片更新有延时,客户端按需延时等待图片更新.
 
-无需修改脚本中文件路径,可直使用.多谢[LathamZ](https://github.com/LathamZ)
+无需修改脚本中文件路径,可直使用.多谢[LathamZ](https://github.com/LathamZ),mac版本也都是由[LathamZ](https://github.com/LathamZ)更新.
 
 使用mac版本时，请确保安装了PIL(Pillow)库。没有请执行这条命令：`sudo pip install pillow`
 ## 效果
