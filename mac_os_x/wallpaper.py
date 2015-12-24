@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-__auther__ = 'xiao'
+#__auther__ = 'xiao'
 
+from __future__ import division
 import re
 import urllib2
 import time
@@ -47,12 +48,13 @@ def download_img():
         response_img = urllib2.urlopen(request_img)#
     except:
         print "Wating server download..."
-        time.sleep(60)#delay for server update
+        time.sleep(60)# delay for server update
         response_img = urllib2.urlopen(request_img_2)
 
     data_img = Image.open(response_img)
     scaled_img = scale_original_wallpaper(data_img)
-    picname = os.path.join(os.path.split(os.path.realpath(__file__))[0], "Earth.png") # pic path under the script dir
+    picname = os.path.join(os.path.split(os.path.realpath(__file__))[0], "%s_%s_%s_%s_%s_%s_Earth.png" % (year, month, day, hour, minute, second)) # pic path under the script dir
+
     scaled_img.save(picname)
 
     return picname
@@ -64,34 +66,51 @@ def scale_original_wallpaper(img):
     bg_img = Image.new('RGB', size, 'black')
 
     # calculate the paste origin
-    o_x = (size[0] - ORIGINAL_IMG_WIDTH) / 2
-    o_y = (size[1] - ORIGINAL_IMG_HEIGHT) / 2
-
+    o_x = (size[0] - ORIGINAL_IMG_WIDTH) // 2
+    o_y = (size[1] - ORIGINAL_IMG_HEIGHT) // 2
     bg_img.paste(img, (o_x, o_y))
     return bg_img
 
 def get_desktop_size():
-    """ Get the current desktop resolution. 
+    """ Get the current desktop resolution. No more than 2K.
 
-        Return a tuple of pixels (width, height) """
+        Return a tuple of pixels (width, height)
+    """
     from AppKit import NSScreen
 
     frame = NSScreen.mainScreen().frame()
-    height = int(frame.size.height)
-    width = int(frame.size.width)
+    height = frame.size.height
+    width = frame.size.width
 
-    return (width, height)
+
+    MAX_WIDTH = 2000
+    MAX_HEIGHT = 2000
+
+    if width > MAX_WIDTH or height > MAX_HEIGHT:
+        if width > height:
+            max = width
+            ratio = max / MAX_WIDTH
+        else:
+            max = height
+            ratio = max / MAX_HEIGHT
+        width = width / ratio
+        height = height / ratio
+
+    return (int(width), int(height))
 
 
 
 def set_wallpaper():
     picpath = download_img()
-    script = """/usr/bin/osascript<<END
+    script = """/usr/bin/osascript << END
                 tell application "Finder"
-                set desktop picture to POSIX file "%s"
+                    set desktop picture to POSIX file "%s"
                 end tell
-                END"""
+END"""
     subprocess.call(script%picpath, shell=True)
+    time.sleep(5) # waitting for setting wallpaper.
+    if os.path.isfile(picpath):
+        os.remove(picpath) # delete it after wallpaper set.
     print 'Done.'
 
 if __name__ == '__main__':
