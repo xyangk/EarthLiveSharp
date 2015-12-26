@@ -47,7 +47,7 @@ def download_img():
     try:
         response_img = urllib2.urlopen(request_img)#
     except:
-        print "Wating server download..."
+        print "Waiting server download..."
         time.sleep(60)# delay for server update
         response_img = urllib2.urlopen(request_img_2)
 
@@ -103,9 +103,14 @@ def get_desktop_size():
 def set_wallpaper():
     picpath = download_img()
     script = """/usr/bin/osascript << END
-                tell application "Finder"
-                    set desktop picture to POSIX file "%s"
-                end tell
+                tell application "System Events"
+					set desktopCount to count of desktops
+					repeat with desktopNumber from 1 to desktopCount
+						tell desktop desktopNumber
+							set picture to "%s"
+						end tell
+					end repeat
+				end tell
 END"""
     subprocess.call(script%picpath, shell=True)
     time.sleep(5) # waitting for setting wallpaper.
