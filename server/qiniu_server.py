@@ -6,9 +6,6 @@ from __future__ import unicode_literals
 import qiniu
 import json
 
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 __author__ = 'lniwn'
 __mail__ = 'lniwn@live.com'
@@ -32,9 +29,9 @@ def upload_data(key, data, params=None):
 
 
 def upload_file(key, local_file, mime_type, check_crc=True):
-    key = _safe_encode(key)
+    # key = _safe_encode(key)
     # key = key.encode(encoding='ascii', errors='ignore')
-    token = q.upload_token(__BUCKET_NAME, key)
+    token = q.upload_token(__BUCKET_NAME, _safe_encode(key))
     return qiniu.put_file(token, key, local_file, mime_type=mime_type, check_crc=check_crc)
 
 
@@ -44,6 +41,11 @@ def fetch(url, bucket_name, key=None):
     print(info)
     print(ret)
     return ret
+
+
+def move_file(bucket_name, key_src, key_dst):
+    bucket_name = _safe_encode(bucket_name)
+    return bucket.move(bucket_name, key_src, bucket_name, key_dst)
 
 
 def _safe_encode(src):

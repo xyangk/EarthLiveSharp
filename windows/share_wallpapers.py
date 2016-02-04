@@ -16,18 +16,29 @@ __mail__ = 'lniwn@live.com'
 def on_image_change(img_path, event_name):
     if event_name == 'on_deleted':
         qn.delete('wallpaper', os.path.split(img_path)[1])
-    elif event_name == 'on_modified':
-        if not is_png(img_path):
-            upload_path = to_png(img_path, '~upload.tmp')
-        else:
-            upload_path = img_path
-        qn.upload_file(os.path.split(img_path)[1], upload_path, 'image/jpeg')
+    # elif event_name == 'on_modified':
+    #     if not is_png(img_path):
+    #         upload_path = to_png(img_path, '~upload.tmp')
+    #     else:
+    #         upload_path = img_path
+    #     qn.upload_file(key_from_path(img_path), upload_path, 'image/jpeg')
     elif event_name == 'on_created':
         if not is_png(img_path):
             upload_path = to_png(img_path, '~upload.tmp')
         else:
             upload_path = img_path
-        qn.upload_file(os.path.split(img_path)[1], upload_path, 'image/jpeg')
+        qn.upload_file(key_from_path(img_path), upload_path, 'image/jpeg')
+        # for item in result[0].items():
+        #     print(item[0], item[1])
+    elif event_name == 'on_moved':
+        src_path = img_path[0]
+        dst_path = img_path[1]
+        qn.move_file('wallpaper', key_from_path(src_path), key_from_path(dst_path))
+
+
+def key_from_path(file_path):
+    file_name = os.path.split(file_path)[1]
+    return file_name
 
 
 def to_png(src_path, png_path):

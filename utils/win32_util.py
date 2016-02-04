@@ -27,11 +27,17 @@ class ImageChangeEventHandler(RegexMatchingEventHandler):
         if callable(_ChangeCallback):
             _ChangeCallback(event.src_path, 'on_deleted')
 
+    def on_moved(self, event):
+        if event.is_directory:
+            super(ImageChangeEventHandler, self).on_moved(event)
+        if callable(_ChangeCallback):
+            _ChangeCallback((event.src_path, event.dest_path), 'on_moved')
+
     def on_modified(self, event):
         if event.is_directory:
             return super(ImageChangeEventHandler, self).on_modified(event)
-        if callable(_ChangeCallback):
-            _ChangeCallback(event.src_path, 'on_modified')
+        # if callable(_ChangeCallback):
+        #     _ChangeCallback(event.src_path, 'on_modified')
 
     def on_created(self, event):
         if event.is_directory:
