@@ -5,12 +5,13 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import qiniu
 import json
+import urllib
 
 
 __author__ = 'lniwn'
 __mail__ = 'lniwn@live.com'
 __version = '1.0.0'
-__BUCKET_NAME = 'wallpaper'
+BUCKET_NAME = 'wallpaper'
 
 
 def get_keys(key_path):
@@ -24,14 +25,14 @@ bucket = qiniu.BucketManager(q)
 
 def upload_data(key, data, params=None):
     key = _safe_encode(key)
-    token = q.upload_token(__BUCKET_NAME, key)
+    token = q.upload_token(BUCKET_NAME, key)
     return qiniu.put_data(token, key, data, params=params)
 
 
 def upload_file(key, local_file, mime_type, check_crc=True):
     # key = _safe_encode(key)
     # key = key.encode(encoding='ascii', errors='ignore')
-    token = q.upload_token(__BUCKET_NAME, _safe_encode(key))
+    token = q.upload_token(BUCKET_NAME, _safe_encode(key))
     return qiniu.put_file(token, key, local_file, mime_type=mime_type, check_crc=check_crc)
 
 
@@ -43,9 +44,15 @@ def fetch(url, bucket_name, key=None):
     return ret
 
 
-def move_file(bucket_name, key_src, key_dst):
+def rename(bucket_name, key_src, key_dst):
     bucket_name = _safe_encode(bucket_name)
-    return bucket.move(bucket_name, key_src, bucket_name, key_dst)
+    return bucket.rename(bucket_name, key_src, key_dst)
+
+
+def download(url, save_path):
+    if isinstance(url, unicode):
+        url = url.encode('utf-8')
+    return urllib.urlretrieve(url, save_path)[0]
 
 
 def _safe_encode(src):

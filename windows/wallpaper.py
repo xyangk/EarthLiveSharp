@@ -6,9 +6,8 @@ import urllib2
 import time
 import json
 import os
-import ctypes
-import ctypes.wintypes
-from PIL import Image
+from utils import win32_util
+
 
 __author__ = 'lniwn'
 __mail__ = 'lniwn@live.com'
@@ -65,7 +64,7 @@ def download_img(year, month, day, hour, minute, second):
         # print url
         print('Download newest image successfully.')
 
-    except:
+    except (urllib2.HTTPError, IOError):
         print("Wating server download...")
         # interval = 100
         if 'Earth.png' in os.listdir(os.getcwd()):
@@ -82,37 +81,12 @@ def download_img(year, month, day, hour, minute, second):
     return picname
 
 
-def set_wallpaper(picpath):
-    bg_img = scale_image(picpath)
-    bmp_path = os.path.splitext(picpath)[0] + '.bmp'
-    bg_img.save(bmp_path)
-    done = ctypes.windll.user32.SystemParametersInfoA(0x0014, 0, ctypes.create_string_buffer(bmp_path), 1)
-    print('set wallpaper', 'successfully' if done else 'failed')
-
-
-def scale_image(raw_img):
-    bg_size = get_screen_size()
-    bg_img = Image.new('RGB', bg_size, 'black')
-    im = Image.open(raw_img)
-    raw_size = im.size
-    o_x = (bg_size[0] - raw_size[0]) // 2
-    o_y = (bg_size[1] - raw_size[1]) // 2
-    bg_img.paste(im, (o_x, o_y))
-    return bg_img
-
-
-def get_screen_size():
-    w = ctypes.windll.user32.GetSystemMetrics(0)
-    h = ctypes.windll.user32.GetSystemMetrics(1)
-    return w, h
-
-
 if __name__ == '__main__':
     while len(ACCOUNT_NAME) == 0:
         ACCOUNT_NAME = raw_input('please input your cloudinary account name>>>')
     while True:
         print("waiting...")
         picname = download_img(*get_date())
-        set_wallpaper(picname)
+        win32_util.set_wallpaper(picname)
         # print interval
         time.sleep(interval)

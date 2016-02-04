@@ -9,6 +9,9 @@ from watchdog.observers import Observer
 import time
 import logging
 import os
+import ctypes
+import ctypes.wintypes
+from PIL import Image
 
 # global define
 _ChangeCallback = None   # _ChangeCallback(change_path, event_name)
@@ -75,6 +78,31 @@ def wait_interrupt():
     except KeyboardInterrupt:
         pass
     print('break down')
+
+
+def set_wallpaper(picpath):
+    bg_img = scale_image(picpath)
+    bmp_path = os.path.splitext(picpath)[0] + '.bmp'
+    bg_img.save(bmp_path)
+    done = ctypes.windll.user32.SystemParametersInfoA(0x0014, 0, ctypes.create_string_buffer(bmp_path), 1)
+    print('set wallpaper', 'successfully' if done else 'failed')
+
+
+def scale_image(raw_img):
+    bg_size = get_screen_size()
+    bg_img = Image.new('RGB', bg_size, 'black')
+    im = Image.open(raw_img)
+    raw_size = im.size
+    o_x = (bg_size[0] - raw_size[0]) // 2
+    o_y = (bg_size[1] - raw_size[1]) // 2
+    bg_img.paste(im, (o_x, o_y))
+    return bg_img
+
+
+def get_screen_size():
+    w = ctypes.windll.user32.GetSystemMetrics(0)
+    h = ctypes.windll.user32.GetSystemMetrics(1)
+    return w, h
 
 
 if __name__ == '__main__':
