@@ -14,7 +14,11 @@ import ctypes.wintypes
 from PIL import Image
 
 # global define
-_ChangeCallback = None   # _ChangeCallback(change_path, event_name)
+_ChangeCallback = None  # _ChangeCallback(change_path, event_name)
+HKEY_CURRENT_USER = 0x80000001L
+ERROR_SUCCESS = 0L
+REG_SZ = 1
+
 # ------------------------
 
 
@@ -39,8 +43,8 @@ class ImageChangeEventHandler(RegexMatchingEventHandler):
     def on_modified(self, event):
         if event.is_directory:
             return super(ImageChangeEventHandler, self).on_modified(event)
-        # if callable(_ChangeCallback):
-        #     _ChangeCallback(event.src_path, 'on_modified')
+            # if callable(_ChangeCallback):
+            #     _ChangeCallback(event.src_path, 'on_modified')
 
     def on_created(self, event):
         if event.is_directory:
@@ -84,7 +88,7 @@ def set_wallpaper(picpath):
     bg_img = scale_image(picpath)
     bmp_path = os.path.splitext(picpath)[0] + '.bmp'
     bg_img.save(bmp_path)
-    done = ctypes.windll.user32.SystemParametersInfoA(0x0014, 0, ctypes.create_string_buffer(bmp_path), 1)
+    done = ctypes.windll.user32.SystemParametersInfoW(0x0014, 0, ctypes.create_unicode_buffer(bmp_path), 1)
     print('set wallpaper', 'successfully' if done else 'failed')
 
 
@@ -103,6 +107,29 @@ def get_screen_size():
     w = ctypes.windll.user32.GetSystemMetrics(0)
     h = ctypes.windll.user32.GetSystemMetrics(1)
     return w, h
+
+
+def set_wallpaper_direct(pic_path):
+    tile = u"0"
+    style = u"10"
+    set_registry_value(HKEY_CURRENT_USER, u'Control Panel\\Desktop',
+                       u"TileWallpaper", REG_SZ, ctypes.c_wchar_p(tile), len(tile))
+    set_registry_value(HKEY_CURRENT_USER, u'Control Panel\\Desktop',
+                       u"WallpaperStyle", REG_SZ, ctypes.c_wchar_p(style), len(style))
+    bmp_path = os.path.splitext(pic_path)[0] + '.bmp'
+    Image.open(pic_path).save(bmp_path, format='BMP')
+    done = ctypes.windll.user32.SystemParametersInfoW(0x0014, 0, ctypes.create_unicode_buffer(bmp_path), 1)
+    print('set wallpaper', 'successfully' if done else 'failed')
+
+
+def set_registry_value(hkey, sub_key, value, data_type, data, data_len):
+    # assert isinstance(hkey, ctypes.wintypes.HKEY)
+    return ERROR_SUCCESS == ctypes.windll.shlwapi.SHSetValueW(hkey,
+                                                              ctypes.create_unicode_buffer(sub_key),
+                                                              ctypes.create_unicode_buffer(value),
+                                                              data_type,
+                                                              ctypes.cast(data, ctypes.c_void_p),
+                                                              data_len)
 
 
 if __name__ == '__main__':

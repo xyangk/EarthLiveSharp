@@ -32,7 +32,7 @@ def on_image_change(img_path, event_name):
         else:
             upload_path = img_path
         qn.upload_file(key_from_path(img_path), upload_path, 'image/jpeg')
-        win32_util.set_wallpaper(img_path)
+        win32_util.set_wallpaper_direct(img_path)
         # for item in result[0].items():
         #     print(item[0], item[1])
     elif event_name == 'on_moved':
